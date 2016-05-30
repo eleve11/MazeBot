@@ -31,7 +31,7 @@ public class Maze
     /*
      * generate a random maze
      */
-    private void generate(){
+    protected void generate(){
         DisjointSet dj = new DisjointSet(size*size);
 
         maze = new int[size][size];

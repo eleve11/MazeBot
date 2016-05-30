@@ -34,8 +34,4 @@ public class MazePanel extends JPanel {
     public int[][] getMaze() {
         return m.maze;
     }
-
-    public void setMaze(Maze m) {
-        this.m = m;
-    }
 }

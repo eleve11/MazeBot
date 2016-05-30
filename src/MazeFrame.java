@@ -42,8 +42,7 @@ public class MazeFrame extends JFrame
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                maze = new Maze(maze.maze.length);
-                p.setMaze(maze);
+                maze.generate();
                 p.repaint();
             }
         });
