@@ -41,9 +41,18 @@ public class Maze
         maze[0][entry] = SPACE;
         maze[size-1][exit] = SPACE;
 
+        /*
+         * make every cell reachable
+         */
         int index = (size-1)*(size)-2;
-        path(index, dj);
-
+        while(index > size){
+            //skip wall rows
+            if(index % size == size -1) index -= size+1;
+            //make path to index possible
+            path(index, dj);
+            //skip wal columns
+            index -= 2;
+        }
     }
 
     private static void path(int index, DisjointSet dj)

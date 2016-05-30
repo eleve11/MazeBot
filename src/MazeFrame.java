@@ -12,7 +12,7 @@ public class MazeFrame extends JFrame {
         super(title);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400,450);
+        setSize(500,550);
 
         init();
         setVisible(true);
