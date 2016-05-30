@@ -18,15 +18,13 @@ public class Maze
 
     static Random random = new Random();
 
-
     public static void main(String[] args){
         //size = Integer.parseInt(args[0]);
         //sleeptime = Integer.parseInt(args[1]);
-        size = 20;
-        size = 2*size+1;
+        size = 100;
+        size = 2*size+1; //make it even and double size (walls)
         sleeptime = 10;
-        final MazeFrame f = new MazeFrame("Maze solver");
-        f.init();
+        MazeFrame f = new MazeFrame("Maze solver");
     }
 
     /*
@@ -38,18 +36,20 @@ public class Maze
         maze = new int[size][size];
 
         // clear a path in and out of the maze
-        entry = 0;
-        exit = size -1;
-        maze[entry][1] = SPACE;
-        maze[exit][size-2] = SPACE;
+        entry = 1;
+        exit = size -2;
+        maze[0][entry] = SPACE;
+        maze[size-1][exit] = SPACE;
 
-        path((size-1)*(size)-2,dj);
+        int index = (size-1)*(size)-2;
+        path(index, dj);
+
     }
 
     private static void path(int index, DisjointSet dj)
     {
         //until there is a path
-        while(dj.find(size+1) != dj.find(index))
+        while(dj.find(size+entry) != dj.find(index))
         {
             //loop cells
             for (int i=1; i< size-1; i+=2){
@@ -65,28 +65,28 @@ public class Maze
                     //test random wall
                     int r = random.nextInt(4);
                     switch(r){
-                        //up
+                        //right
                         case 0:
                             if(i-2>0) {
                                 find2 = (i - 2) * size + j;
                                 find1 = (i - 1) * size + j;
                             }else r=-1;
                             break;
-                        //down
+                        //left
                         case 1:
                             if(i+2<size-1) {
                                 find2 = (i + 2) * size + j;
                                 find1 = (i + 1) * size + j;
                             }else r=-1;
                             break;
-                        //left
+                        //up
                         case 2:
                             if(j-2>0) {
                                 find2 = i * size + j - 2;
                                 find1 = i * size + j - 1;
                             }else r=-1;
                             break;
-                        //right
+                        //down
                         case 3:
                             if(j+2 < size-1) {
                                 find2 = i * size + j + 2;
