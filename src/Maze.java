@@ -22,7 +22,8 @@ public class Maze
     public static void main(String[] args){
         //size = Integer.parseInt(args[0]);
         //sleeptime = Integer.parseInt(args[1]);
-        size = 6;
+        size = 20;
+        size = 2*size+1;
         sleeptime = 10;
         final MazeFrame f = new MazeFrame("Maze solver");
         f.init();
@@ -39,18 +40,16 @@ public class Maze
         // clear a path in and out of the maze
         entry = 0;
         exit = size -1;
-        maze[entry][0] = SPACE;
         maze[entry][1] = SPACE;
-        maze[exit][size-1] = SPACE;
         maze[exit][size-2] = SPACE;
 
-        path((exit)*(exit)-1,dj);
+        path((size-1)*(size)-2,dj);
     }
 
     private static void path(int index, DisjointSet dj)
     {
         //until there is a path
-        while(dj.find(entry+1) != dj.find(index))
+        while(dj.find(size+1) != dj.find(index))
         {
             //loop cells
             for (int i=1; i< size-1; i+=2){
@@ -63,27 +62,31 @@ public class Maze
                     //default finds
                     find2 = i*size + j;
                     find1 = find2;
+                    //test random wall
                     int r = random.nextInt(4);
-                    //test random edge
                     switch(r){
+                        //up
                         case 0:
-                            if(i-2>=0) {
+                            if(i-2>0) {
                                 find2 = (i - 2) * size + j;
                                 find1 = (i - 1) * size + j;
                             }else r=-1;
                             break;
+                        //down
                         case 1:
                             if(i+2<size-1) {
                                 find2 = (i + 2) * size + j;
                                 find1 = (i + 1) * size + j;
                             }else r=-1;
                             break;
+                        //left
                         case 2:
-                            if(j-2>=0) {
+                            if(j-2>0) {
                                 find2 = i * size + j - 2;
                                 find1 = i * size + j - 1;
                             }else r=-1;
                             break;
+                        //right
                         case 3:
                             if(j+2 < size-1) {
                                 find2 = i * size + j + 2;
@@ -91,14 +94,15 @@ public class Maze
                             }else r=-1;
                             break;
                     }
+
                     find2 = dj.find(find2);
                     find1 = dj.find(find1);
 
 
                     //randomly remove wall if is not part of same path
-                    if ((find0 != find2 && find0!=find1) && Math.random() > 0.5) {
-                        dj.union(find0, find2);
+                    if (find0 != find1 && find0!=find2 && Math.random() > 0.5) {
                         dj.union(find0,find1);
+                        dj.union(find0, find2);
 
                          maze[i][j] = SPACE;
 
