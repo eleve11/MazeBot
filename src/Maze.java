@@ -11,26 +11,27 @@ public class Maze
     public final static int VISITED = 2;
     public final static int DEAD_END = 3;
 
-    public static int[][] maze;
-    static int size;
-    static int sleeptime;
-    static int entry, exit;
+    public final static int SLEEPTIME = 10; //used for the solver animation
 
-    static Random random = new Random();
+    protected int[][] maze;
+    private int size;
+    private int entry, exit;
+    private Random random = new Random();
+
+    public Maze(int size){
+        this.size = 2*size+1; //make it even and double size (walls)
+        generate();
+    }
 
     public static void main(String[] args){
-        //size = Integer.parseInt(args[0]);
-        //sleeptime = Integer.parseInt(args[1]);
-        size = 100;
-        size = 2*size+1; //make it even and double size (walls)
-        sleeptime = 10;
-        MazeFrame f = new MazeFrame("Maze solver");
+        MazeFrame f = new MazeFrame("Maze solver",50);
+        f.init();
     }
 
     /*
      * generate a random maze
      */
-    static void generate(){
+    private void generate(){
         DisjointSet dj = new DisjointSet(size*size);
 
         maze = new int[size][size];
@@ -55,7 +56,7 @@ public class Maze
         }
     }
 
-    private static void path(int index, DisjointSet dj)
+    private void path(int index, DisjointSet dj)
     {
         //until there is a path
         while(dj.find(size+entry) != dj.find(index))
@@ -71,6 +72,7 @@ public class Maze
                     //default finds
                     find2 = i*size + j;
                     find1 = find2;
+
                     //test random wall
                     int r = random.nextInt(4);
                     switch(r){
@@ -108,8 +110,9 @@ public class Maze
                     find1 = dj.find(find1);
 
 
-                    //randomly remove wall if is not part of same path
-                    if (find0 != find1 && find0!=find2 && Math.random() > 0.5) {
+                    //randomly break wall if is not part of same path
+                    if (find0 != find1 && find0!=find2 && Math.random() > 0.5)
+                    {
                         dj.union(find0,find1);
                         dj.union(find0, find2);
 
@@ -137,6 +140,11 @@ public class Maze
                 }
             }
         }
+    }
+
+    public void solve(MazePanel p){
+        Solver s = new Solver(p);
+        s.solve(0,entry);
     }
 
 }
