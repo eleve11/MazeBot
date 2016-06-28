@@ -5,7 +5,7 @@ import java.util.Random;
  */
 public class Maze
 {
-    //define cell values
+    //define cell constant values
     public final static int WALL = 0; //wall as default value
     public final static int SPACE = 1;
     public final static int VISITED = 2;
@@ -19,7 +19,8 @@ public class Maze
     private Random random = new Random();
 
     public Maze(int size){
-        this.size = 2*size+1; //make it even and double size (walls)
+        //make size even(to fit walls)
+        this.size = size%2==0 ? size+1 : size;
         generate();
     }
 
@@ -31,8 +32,9 @@ public class Maze
     /*
      * generate a random maze
      */
-    protected void generate(){
-        DisjointSet dj = new DisjointSet(size*size);
+    protected void generate()
+    {
+        DisjointSets dj = new DisjointSets(size*size);
 
         maze = new int[size][size];
 
@@ -56,7 +58,7 @@ public class Maze
         }
     }
 
-    private void path(int index, DisjointSet dj)
+    private void path(int index, DisjointSets dj)
     {
         //until there is a path
         while(dj.find(size+entry) != dj.find(index))
@@ -142,6 +144,7 @@ public class Maze
         }
     }
 
+    //ask Solver to solve this
     public void solve(MazePanel p){
         Solver s = new Solver(p);
         s.solve(0,entry);
